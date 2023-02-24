@@ -12,14 +12,14 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="./styles.css" />
-    <title>Upcoming Events</title>
+    <title>Past Events</title>
   </head>
 
   <body>
     <header>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="./index.html">
-          <img src="/assets/Logo Amazing Events.png" alt="Logo" height="36" />
+          <img src="/assets/Logo_Amazing_Events.png" alt="Logo" height="36" />
         </a>
         <button
           class="navbar-toggler"
@@ -29,6 +29,8 @@
           aria-controls="navbarSupportedContent"
           aria-expanded="false"
           aria-label="Toggle navigation"
+          data-bs-toggle="collapse"
+          data-bs-target=".navbar-collapse"
         >
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -39,10 +41,10 @@
               <a class="nav-link" href="./index.html">Home </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Upcoming Events</a>
+              <a class="nav-link" href="./upcoming_events.html">Upcoming Events</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="./past events.html">Past Events</a>
+              <a class="nav-link" href="#">Past Events</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="./contact.html">Contact</a>
@@ -58,9 +60,9 @@
       <div
         class="d-flex flex-row justify-content-between align-items-center central-nav"
       >
-        <a href="./index.html"><i class="fa-solid fa-chevron-left"></i></a>
-        <h3>UPCOMING EVENTS</h3>
-        <a href="./past events.html"
+        <a href="./upcoming_events.html"><i class="fa-solid fa-chevron-left"></i></a>
+        <h3>PAST EVENTS</h3>
+        <a href="./contact.html"
           ><i class="fa-solid fa-chevron-right"></i
         ></a>
       </div>
@@ -100,7 +102,7 @@
       <div
         class="container mt-4 d-flex flex-wrap align-items-center justify-content-center"
       >
-        <div class="card mx-2 my-2" style="width: 18rem; height: 22rem">
+        <div class="card mx-2 my-2" style="width: 18rem; height: 22rem;">
           <img
             class="card-img-top"
             src="assets/Cinema.jpg"
@@ -120,7 +122,7 @@
             </div>
           </div>
         </div>
-        <div class="card mx-2 my-2" style="width: 18rem; height: 22rem">
+        <div class="card mx-2 my-2" style="width: 18rem; height: 22rem;">
           <img
             class="card-img-top"
             src="assets/Costume_Party.jpg"
@@ -140,7 +142,7 @@
             </div>
           </div>
         </div>
-        <div class="card mx-2 my-2" style="width: 18rem; height: 22rem">
+        <div class="card mx-2 my-2" style="width: 18rem; height: 22rem;">
           <img
             class="card-img-top"
             src="assets/Food_Fair.jpg"
@@ -160,11 +162,12 @@
             </div>
           </div>
         </div>
-        <div class="card mx-2 my-2" style="width: 18rem; height: 22rem">
+        <div class="card mx-2 my-2" style="width: 18rem; height: 22rem;">
           <img
             class="card-img-top"
             src="assets/Marathon.jpg"
             alt="Card image cap"
+            
           />
           <div class="card-body">
             <h5 class="card-title">Titulo</h5>
@@ -180,7 +183,7 @@
             </div>
           </div>
         </div>
-        <div class="card mx-2 my-2" style="width: 18rem; height: 22rem">
+        <div class="card mx-2 my-2" style="width: 18rem; height: 22rem;">
           <img
             class="card-img-top"
             src="assets/Museum_Tour.jpg"
@@ -200,7 +203,7 @@
             </div>
           </div>
         </div>
-        <div class="card mx-2 my-2" style="width: 18rem; height: 22rem">
+        <div class="card mx-2 my-2" style="width: 18rem; height: 22rem;">
           <img
             class="card-img-top"
             src="assets/Music_Concert.jpg"
@@ -227,8 +230,11 @@
       class="d-flex flex-wrap justify-content-between align-items-center px-3 pt-3 mt-4 border-top"
     >
       <div class="col-md-4 py-3 d-flex align-items-center">
-        <a href="/" class="mb-3 me-2 mb-md-0 text-decoration-none lh-1">
-          <span class="mb-3 mb-md-0">Cohort</span></a
+        <a
+          href="/"
+          class="mb-3 me-2 mb-md-0 text-decoration-none lh-1"
+        >
+          <span class="mb-3 mb-md-0 ">Cohort</span></a
         >
       </div>
 
