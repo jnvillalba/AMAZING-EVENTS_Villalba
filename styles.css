@@ -48,6 +48,11 @@ body {
     background: gray;
 }
 
+.card-img-top {
+    min-height: 200px;
+  }
+  
+
 /** Details **/
 
 img {
