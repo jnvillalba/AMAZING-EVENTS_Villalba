@@ -3,7 +3,6 @@ console.log(data.events.length);
 
 let eventContainer = document.getElementById("index-cards");
 
-//for (let i = 0; i < data.eventos.length; i++)
 for (let event of data.events) {
   let card = document.createElement("div");
   card.className = "card d-flex flex-column align-items-center mx-2 my-2";
