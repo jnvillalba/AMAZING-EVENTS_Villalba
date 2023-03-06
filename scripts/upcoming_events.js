@@ -5,7 +5,6 @@ const upcomingEvents = data.events.filter(
   (event) => data.currentDate <= event.date
 );
 
-// Itere sobre todos los eventos filtrados
 for (const event of upcomingEvents) {
   const card = document.createElement("div");
   card.classList.add(
