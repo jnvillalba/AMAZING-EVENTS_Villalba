@@ -53,3 +53,43 @@ categories.forEach((category) => {
   categoryContainer.appendChild(checkbox);
   categoryContainer.appendChild(label);
 });
+
+/************************* Search ************************/
+
+const searchInput = document.querySelector('#form1');
+const searchResults = document.querySelector('#search-results');
+function updateSearchResults() {
+  const searchTerm = searchInput.value.toLowerCase();
+  const filteredEvents = data.events.filter(event => event.name.toLowerCase().includes(searchTerm));
+
+  let resultsHtml = '';
+  filteredEvents.forEach(event => {
+    resultsHtml += `
+      <div class="search-result" data-label="${event.name}">
+        <h3>${event.name}</h3>
+        <p>${event.date} at ${event.place}</p>
+      </div>
+    `;
+  });
+
+  if (searchTerm === '') {
+    searchResults.style.display = 'none';
+  } else if (filteredEvents.length > 0) {
+    searchResults.style.display = 'block';
+    searchResults.innerHTML = resultsHtml;
+  } else {
+    searchResults.style.display = 'none';
+  }
+
+  const resultDivs = document.querySelectorAll('.search-result');
+  resultDivs.forEach(div => {
+    div.addEventListener('click', () => {
+      const label = div.getAttribute('data-label');
+      searchInput.value = label;
+      searchResults.innerHTML = '';
+      searchResults.style.display = 'none';
+    });
+  });
+}
+
+searchInput.addEventListener('input', updateSearchResults);
