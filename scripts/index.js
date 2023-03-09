@@ -37,7 +37,7 @@ const events = data.events;
 
 const categories = [...new Set(events.map((event) => event.category))];
 
-const categoryContainer = document.getElementById("index-checkbox");
+const categoryContainer = document.getElementById("checkboxs");
 
 categories.forEach((category) => {
   const label = document.createElement("label");
