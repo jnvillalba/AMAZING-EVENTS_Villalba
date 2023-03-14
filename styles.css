@@ -95,12 +95,14 @@ a {
     margin-right: 5px;
 }
 
-#search-results {
+#search-results,
+#upc-search-results,#past-search-results {
     display: none;
 }
 
 
-#search-results {
+#search-results,#upc-search-results,
+#past-search-results {
 
     position: absolute;
     z-index: 99;
@@ -189,6 +191,7 @@ img {
     display: block;
     width: 100%;
 }
+
 .cta {
     display: flex;
     flex-wrap: wrap;
