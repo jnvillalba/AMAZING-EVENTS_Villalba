@@ -24,7 +24,7 @@ for (const event of upcomingEvents) {
         <p class="card-text">${event.description}</p>
         <div class="d-flex justify-content-between align-items-center px-1 pt-4 pb-3" style="position: absolute; bottom: 0; width: 90%;">
           <p class="mb-0">Price: $ ${event.price}</p>
-          <button type="button" class="btn btn-primary button" onclick="location.href='./details.html'">Details</button>
+          <button type="button" class="btn btn-primary button" onclick="location.href='./details.html?id=${event._id}'">Details</button>
         </div>
       </div>
     `;
@@ -93,7 +93,7 @@ function showEvents(events) {
         <button
           type="button"
           class="btn btn-primary button"
-          onclick="location.href='./details.html'"
+          onclick="location.href='./details.html?id=${event._id}'"
         >
           Details
         </button>

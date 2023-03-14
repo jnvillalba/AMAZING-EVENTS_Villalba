@@ -57,7 +57,7 @@ function showEvents(events) {
         <button
           type="button"
           class="btn btn-primary button"
-          onclick="location.href='./details.html?id=${event.id}'"
+          onclick="location.href='./details.html?id=${event._id}'"
         >
           Details
         </button>
