@@ -1,36 +1,35 @@
 //console.log("index");
 //console.log(data.events.length);
-
 let eventContainer = document.getElementById("index-cards");
-//console.log(eventContainer);
-for (let event of data.events) {
-  let card = document.createElement("div");
-  card.className = "card d-flex flex-column align-items-center mx-2 my-2";
-  card.style = "width: 18rem; height: 25rem";
-  card.innerHTML = `
-    <img
-      class="card-img-top"
-      src="${event.image}"
-      alt="Card image cap"
-    />
-    <div class="card-body">
-      <h5 class="card-title">${event.name}</h5>
-      <p class="card-text">${event.description}</p>
-    
-      <div class="d-flex justify-content-between align-items-center px-1 pt-4 pb-3" style="position: absolute; bottom: 0; width: 90%;">
-    <p class="mb-0">Price: $ ${event.price}</p>
-        <button
-          type="button"
-          class="btn btn-primary button"
-          onclick="location.href='./details.html?id=${event._id}'"
-        >
-          Details
-        </button>
-        
-      </div>
-    </div>
-    `;
 
+function createEventCard(event) {
+  const card = document.createElement("div");
+  card.classList.add(
+    "card",
+    "d-flex",
+    "flex-column",
+    "align-items-center",
+    "mx-2",
+    "my-2"
+  );
+  card.style.width = "18rem";
+  card.style.height = "25rem";
+  card.innerHTML = `
+      <img class="card-img-top" src="${event.image}" alt="Card image cap">
+      <div class="card-body">
+        <h5 class="card-title">${event.name}</h5>
+        <p class="card-text">${event.description}</p>
+        <div class="d-flex justify-content-between align-items-center px-1 pt-4 pb-3" style="position: absolute; bottom: 0; width: 90%;">
+          <p class="mb-0">Price: $ ${event.price}</p>
+          <button type="button" class="btn btn-primary button" onclick="location.href='./details.html?id=${event._id}'">Details</button>
+        </div>
+      </div>
+    `;
+  return card;
+}
+
+for (const event of data.events) {
+  const card = createEventCard(event);
   eventContainer.appendChild(card);
 }
 
@@ -118,33 +117,9 @@ categories.forEach((category) => {
 function showEvents(events) {
   const eventsList = document.getElementById("index-cards");
   eventsList.innerHTML = "";
-
   events.forEach((event) => {
-    let card = document.createElement("div");
-    card.className = "card d-flex flex-column align-items-center mx-2 my-2";
-    card.style = "width: 18rem; height: 25rem";
-    card.innerHTML = `
-    <img
-      class="card-img-top"
-      src="${event.image}"
-      alt="Card image cap"
-    />
-    <div class="card-body">
-      <h5 class="card-title">${event.name}</h5>
-      <p class="card-text">${event.description}</p>
-    
-      <div class="d-flex justify-content-between align-items-center px-1 pt-4 pb-3" style="position: absolute; bottom: 0; width: 90%;">
-    <p class="mb-0">Price: $ ${event.price}</p>
-        <button
-          type="button"
-          class="btn btn-primary button"
-          onclick="location.href='./details.html?id=${event._id}'"
-        >
-          Details
-        </button>
-      </div>
-    </div>
-    `;
+    let card = createEventCard(event);
     eventsList.appendChild(card);
   });
+
 }
