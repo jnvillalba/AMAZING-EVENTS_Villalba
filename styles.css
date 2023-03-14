@@ -97,8 +97,8 @@ a {
 
 #search-results {
     display: none;
-  }
-  
+}
+
 
 #search-results {
 
@@ -189,8 +189,6 @@ img {
     display: block;
     width: 100%;
 }
-
-
 .cta {
     display: flex;
     flex-wrap: wrap;
@@ -204,7 +202,7 @@ img {
 }
 
 .cta img {
-    aspect-ratio: 3 / 2;
+    aspect-ratio: 3 / 1;
     object-fit: cover;
     flex: 1 1 300px;
     outline: 0.5rem solid;

@@ -1,7 +1,7 @@
 const eventsChecks = data.events;
 
 const categories = [...new Set(eventsChecks.map((event) => event.category))];
-console.log(categories)
+//console.log(categories)
 const categoryContainer = document.getElementById("checkboxs");
 
 categories.forEach((category) => {
@@ -57,7 +57,7 @@ function showEvents(events) {
         <button
           type="button"
           class="btn btn-primary button"
-          onclick="location.href='./details.html'"
+          onclick="location.href='./details.html?id=${event.id}'"
         >
           Details
         </button>

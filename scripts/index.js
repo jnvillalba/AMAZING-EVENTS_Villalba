@@ -1,8 +1,8 @@
-console.log("index");
-console.log(data.events.length);
+//console.log("index");
+//console.log(data.events.length);
 
 let eventContainer = document.getElementById("index-cards");
-
+//console.log(eventContainer);
 for (let event of data.events) {
   let card = document.createElement("div");
   card.className = "card d-flex flex-column align-items-center mx-2 my-2";
@@ -22,10 +22,11 @@ for (let event of data.events) {
         <button
           type="button"
           class="btn btn-primary button"
-          onclick="location.href='./details.html'"
+          onclick="location.href='./details.html?id=${event._id}'"
         >
           Details
         </button>
+        
       </div>
     </div>
     `;
@@ -33,17 +34,18 @@ for (let event of data.events) {
   eventContainer.appendChild(card);
 }
 
-
 /************************* Search ************************/
 
-const searchInput = document.querySelector('#form1');
-const searchResults = document.querySelector('#search-results');
+const searchInput = document.querySelector("#form1");
+const searchResults = document.querySelector("#search-results");
 function updateSearchResults() {
   const searchTerm = searchInput.value.toLowerCase();
-  const filteredEvents = data.events.filter(event => event.name.toLowerCase().includes(searchTerm));
+  const filteredEvents = data.events.filter((event) =>
+    event.name.toLowerCase().includes(searchTerm)
+  );
 
-  let resultsHtml = '';
-  filteredEvents.forEach(event => {
+  let resultsHtml = "";
+  filteredEvents.forEach((event) => {
     resultsHtml += `
       <div class="search-result" data-label="${event.name}">
         <h3>${event.name}</h3>
@@ -52,24 +54,24 @@ function updateSearchResults() {
     `;
   });
 
-  if (searchTerm === '') {
-    searchResults.style.display = 'none';
+  if (searchTerm === "") {
+    searchResults.style.display = "none";
   } else if (filteredEvents.length > 0) {
-    searchResults.style.display = 'block';
+    searchResults.style.display = "block";
     searchResults.innerHTML = resultsHtml;
   } else {
-    searchResults.style.display = 'none';
+    searchResults.style.display = "none";
   }
 
-  const resultDivs = document.querySelectorAll('.search-result');
-  resultDivs.forEach(div => {
-    div.addEventListener('click', () => {
-      const label = div.getAttribute('data-label');
+  const resultDivs = document.querySelectorAll(".search-result");
+  resultDivs.forEach((div) => {
+    div.addEventListener("click", () => {
+      const label = div.getAttribute("data-label");
       searchInput.value = label;
-      searchResults.innerHTML = '';
-      searchResults.style.display = 'none';
+      searchResults.innerHTML = "";
+      searchResults.style.display = "none";
     });
   });
 }
 
-searchInput.addEventListener('input', updateSearchResults);
+searchInput.addEventListener("input", updateSearchResults);
