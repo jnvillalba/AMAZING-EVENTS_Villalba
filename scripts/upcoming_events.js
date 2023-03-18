@@ -1,7 +1,27 @@
+/************************* Cards ************************/
+let eventsJSON;
+const getEvents = async () => {
+  try {
+    const response = await fetch('../amazing.json')
+    eventsJSON = await response.json()
+    const upcomingEvents = eventsJSON.events.filter(
+      (event) => eventsJSON.currentDate <= event.date
+    );
+    console.log("upcomingEvents " + upcomingEvents.length);
+    printCards(upcomingEvents);
+    const categories = [...new Set(eventsJSON.events.map((event) => event.category))];
+    printCheckboxs(categories, upcomingEvents);
+    printSearch(upcomingEvents);
+  }
+  catch (error) {
+    console.log(error);
+    alert('Error')
+  }
+}
+
+getEvents()
+
 let eventContainer = document.getElementById("upcoming-cards");
-const upcomingEvents = data.events.filter(
-  (event) => data.currentDate <= event.date
-);
 
 function createEventCard(event) {
   const card = document.createElement("div");
@@ -29,105 +49,89 @@ function createEventCard(event) {
   return card;
 }
 
-for (const event of upcomingEvents) {
-  const card = createEventCard(event);
-  eventContainer.appendChild(card);
+function printCards(events) {
+  for (const event of events) {
+    const card = createEventCard(event);
+    eventContainer.appendChild(card);
+  }
 }
 /************************* Checkbox ************************/
 
-const eventsChecks = data.events;
+function printCheckboxs(categories, events) {
+  const categoryContainer = document.getElementById("checkboxs");
 
-const categories = [...new Set(eventsChecks.map((event) => event.category))];
+  categories.forEach((category) => {
+    const label = document.createElement("label");
+    label.textContent = category;
 
-const categoryContainer = document.getElementById("checkboxs");
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.name = category;
+    checkbox.value = category;
 
-categories.forEach((category) => {
-  const label = document.createElement("label");
-  label.textContent = category;
+    label.setAttribute("for", checkbox.id);
 
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.name = category;
-  checkbox.value = category;
+    checkbox.addEventListener("click", () => {
+      const checkedCategories = Array.from(
+        categoryContainer.querySelectorAll('input[type="checkbox"]:checked')
+      ).map((checkbox) => checkbox.value);
+      let filteredEvents = [];
+      if (checkedCategories.length === 0) {
+        filteredEvents = events;
+      } else {
+        filteredEvents = events.filter((event) =>
+          checkedCategories.includes(event.category)
+        );
+      }
+      showEvents(filteredEvents);
+    });
 
-  label.setAttribute("for", checkbox.id);
-
-  checkbox.addEventListener("click", () => {
-    const checkedCategories = Array.from(
-      categoryContainer.querySelectorAll('input[type="checkbox"]:checked')
-    ).map((checkbox) => checkbox.value);
-    let filteredEvents = [];
-    if (checkedCategories.length === 0) {
-      filteredEvents = upcomingEvents;
-    } else {
-      filteredEvents = upcomingEvents.filter((event) =>
-        checkedCategories.includes(event.category)
-      );
-    }
-    showEvents(filteredEvents);
+    categoryContainer.appendChild(checkbox);
+    categoryContainer.appendChild(label);
   });
-
-  categoryContainer.appendChild(checkbox);
-  categoryContainer.appendChild(label);
-});
+}
 
 function showEvents(events) {
   const eventsList = document.getElementById("upcoming-cards");
   eventsList.innerHTML = "";
-
   events.forEach((event) => {
     let card = createEventCard(event);
     eventsList.appendChild(card);
   });
-}
 
+}
 
 /************************* Search ************************/
 
-const searchInput = document.querySelector("#upc-form1");
-const searchResults = document.querySelector("#upc-search-results");
-function updateSearchResults() {
-  const searchTerm = searchInput.value.toLowerCase();
-  const filteredEvents = upcomingEvents.filter((event) =>
-    event.name.toLowerCase().includes(searchTerm)
-  );
+function printSearch(events) {
+  const searchInput = document.getElementById("upc-form1");
 
-  let resultsHtml = "";
-  filteredEvents.forEach((event) => {
-    resultsHtml += `
-      <div class="search-result" data-label="${event.name}" onclick="location.href='./details.html?id=${event._id}'">
-        <h3>${event.name}</h3>
-        <p>${event.date} at ${event.place}</p>
-      </div>
-    `;
-  });
+  searchInput.addEventListener("input", () => {
+    const searchValue = searchInput.value.trim().toLowerCase();
+    const checkedCategories = Array.from(
+      document.querySelectorAll('input[type="checkbox"]:checked')
+    ).map((checkbox) => checkbox.value);
 
-  if (searchTerm === "") {
-    searchResults.style.display = "none";
-    showEvents(upcomingEvents)
-  } else if (filteredEvents.length > 0) {
-    searchResults.style.display = "block";
-    searchResults.innerHTML = resultsHtml;
-    showEvents(filteredEvents);
-  } else {
-    searchResults.style.display = "none";
-  }
+    let filteredEvents = [];
 
-  const resultDivs = document.querySelectorAll(".search-result");
-  resultDivs.forEach((div) => {
-    div.addEventListener("click", () => {
-      const label = div.getAttribute("data-label");
-      searchInput.value = label;
-      searchResults.innerHTML = "";
-      searchResults.style.display = "none";
-    });
+    if (checkedCategories.length === 0) {
+      filteredEvents = events.filter((event) =>
+        event.name.toLowerCase().includes(searchValue)
+      );
+    } else {
+      filteredEvents = events.filter(
+        (event) =>
+          checkedCategories.includes(event.category) &&
+          event.name.toLowerCase().includes(searchValue)
+      );
+    }
+
+    if (filteredEvents.length === 0) {
+      document.getElementById("upcoming-cards").innerHTML =
+        "<h5 style='color: white;'>No se encontraron eventos que coincidan con la búsqueda.</h5>";
+    } else {
+      showEvents(filteredEvents);
+    }
   });
 }
-
-searchInput.addEventListener("input", updateSearchResults);
-
-
-
-
-
 
