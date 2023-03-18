@@ -1,4 +1,4 @@
-
+/************************* Cards ************************/
 let eventsJSON;
 const getEvents = async () => {
   try {
@@ -14,8 +14,6 @@ const getEvents = async () => {
 }
 
 getEvents()
-
-/************************* Cards ************************/
 
 let eventContainer = document.getElementById("index-cards");
 
@@ -52,17 +50,14 @@ function printCards(events) {
   }
 }
 
-
 /************************* Checkbox ************************/
-
-
 const getCheckbox = async () => {
   try {
     const response = await fetch('../amazing.json')
     eventsJSON = await response.json()
     const categories = [...new Set(eventsJSON.events.map((event) => event.category))];
     printCheckboxs(categories, eventsJSON.events);
-    console.log(categories)
+
   }
   catch (error) {
     console.log(error);
@@ -115,47 +110,49 @@ function showEvents(events) {
 
 }
 
-
 /************************* Search ************************/
-
-const searchInput = document.querySelector("#form1");
-const searchResults = document.querySelector("#search-results");
-function updateSearchResults() {
-  const searchTerm = searchInput.value.toLowerCase();
-  const filteredEvents = data.events.filter((event) =>
-    event.name.toLowerCase().includes(searchTerm)
-  );
-
-  let resultsHtml = "";
-  filteredEvents.forEach((event) => {
-    resultsHtml += `
-      <div class="search-result" data-label="${event.name}" onclick="location.href='./details.html?id=${event._id}'">
-        <h3>${event.name}</h3>
-        <p>${event.date} at ${event.place}</p>
-      </div>
-    `;
-  });
-
-  if (searchTerm === "") {
-    searchResults.style.display = "none";
-    showEvents(data.events)
-  } else if (filteredEvents.length > 0) {
-    searchResults.style.display = "block";
-    searchResults.innerHTML = resultsHtml;
-    showEvents(filteredEvents);
-  } else {
-    searchResults.style.display = "none";
+const getSearch = async () => {
+  try {
+    const response = await fetch('../amazing.json')
+    eventsJSON = await response.json()
+    printSearch(eventsJSON.events);
   }
+  catch (error) {
+    console.log(error);
+    alert('Error')
+  }
+}
+getSearch()
 
-  const resultDivs = document.querySelectorAll(".search-result");
-  resultDivs.forEach((div) => {
-    div.addEventListener("click", () => {
-      const label = div.getAttribute("data-label");
-      searchInput.value = label;
-      searchResults.innerHTML = "";
-      searchResults.style.display = "none";
-    });
+const searchInput = document.getElementById('form1');
+function printSearch(events) {
+  const searchInput = document.getElementById("form1");
+
+  searchInput.addEventListener("input", () => {
+    const searchValue = searchInput.value.trim().toLowerCase();
+    const checkedCategories = Array.from(
+      document.querySelectorAll('input[type="checkbox"]:checked')
+    ).map((checkbox) => checkbox.value);
+
+    let filteredEvents = [];
+
+    if (checkedCategories.length === 0) {
+      filteredEvents = events.filter((event) =>
+        event.name.toLowerCase().includes(searchValue)
+      );
+    } else {
+      filteredEvents = events.filter(
+        (event) =>
+          checkedCategories.includes(event.category) &&
+          event.name.toLowerCase().includes(searchValue)
+      );
+    }
+
+    if (filteredEvents.length === 0) {
+      document.getElementById("index-cards").innerHTML =
+        "<h5 style='color: white;'>No se encontraron eventos que coincidan con la búsqueda.</h5>";
+    } else {
+      showEvents(filteredEvents);
+    }
   });
 }
-
-searchInput.addEventListener("input", updateSearchResults);
