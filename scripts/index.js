@@ -6,6 +6,9 @@ const getEvents = async () => {
     eventsJSON = await response.json()
     console.log(eventsJSON);
     printCards(eventsJSON.events);
+    const categories = [...new Set(eventsJSON.events.map((event) => event.category))];
+    printCheckboxs(categories, eventsJSON.events);
+    printSearch(eventsJSON.events);
   }
   catch (error) {
     console.log(error);
@@ -49,22 +52,7 @@ function printCards(events) {
     eventContainer.appendChild(card);
   }
 }
-
 /************************* Checkbox ************************/
-const getCheckbox = async () => {
-  try {
-    const response = await fetch('../amazing.json')
-    eventsJSON = await response.json()
-    const categories = [...new Set(eventsJSON.events.map((event) => event.category))];
-    printCheckboxs(categories, eventsJSON.events);
-
-  }
-  catch (error) {
-    console.log(error);
-    alert('Error')
-  }
-}
-getCheckbox()
 
 function printCheckboxs(categories, events) {
   const categoryContainer = document.getElementById("checkboxs");
@@ -111,20 +99,7 @@ function showEvents(events) {
 }
 
 /************************* Search ************************/
-const getSearch = async () => {
-  try {
-    const response = await fetch('../amazing.json')
-    eventsJSON = await response.json()
-    printSearch(eventsJSON.events);
-  }
-  catch (error) {
-    console.log(error);
-    alert('Error')
-  }
-}
-getSearch()
 
-const searchInput = document.getElementById('form1');
 function printSearch(events) {
   const searchInput = document.getElementById("form1");
 
