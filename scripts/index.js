@@ -1,5 +1,22 @@
-//console.log("index");
-//console.log(data.events.length);
+
+let eventsJSON;
+const getEvents = async () => {
+  try {
+    const response = await fetch('../amazing.json')
+    eventsJSON = await response.json()
+    console.log(eventsJSON);
+    printCards(eventsJSON.events);
+  }
+  catch (error) {
+    console.log(error);
+    alert('Error')
+  }
+}
+
+getEvents()
+
+/************************* Cards ************************/
+
 let eventContainer = document.getElementById("index-cards");
 
 function createEventCard(event) {
@@ -28,9 +45,11 @@ function createEventCard(event) {
   return card;
 }
 
-for (const event of data.events) {
-  const card = createEventCard(event);
-  eventContainer.appendChild(card);
+function printCards(events) {
+  for (const event of events) {
+    const card = createEventCard(event);
+    eventContainer.appendChild(card);
+  }
 }
 
 /************************* Search ************************/
