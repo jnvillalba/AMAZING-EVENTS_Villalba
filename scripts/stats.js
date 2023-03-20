@@ -2,6 +2,8 @@
 const table = document.querySelector('#stats-table');
 
 const upctable = document.querySelector('#upc-table');
+
+const pastTable = document.querySelector('#past-table');
 let eventsJSON;
 const getEvents = async () => {
     try {
@@ -24,10 +26,19 @@ getEvents().then(() => {
     const upcomingEvents = events.filter(
         (event) => eventsJSON.currentDate <= event.date
     );
-    const categories = [...new Set(upcomingEvents.map((event) => event.category))];
-    const revenues = categoryRevenues(categories, upcomingEvents);
-    const attendances = categoryAttendances(categories, upcomingEvents);
-    printStatsByCategory(categories, revenues, attendances, upctable)
+    const upcCategories = [...new Set(upcomingEvents.map((event) => event.category))];
+    const upcRevenues = categoryRevenues(upcCategories, upcomingEvents);
+    const upcAttendances = categoryAttendances(upcCategories, upcomingEvents);
+    printStatsByCategory(upcCategories, upcRevenues, upcAttendances, upctable)
+
+    //📌 Tercera parte:
+    const pastEvents = events.filter(
+        (event) => eventsJSON.currentDate >= event.date
+    );
+    const pastCategories = [...new Set(pastEvents.map((event) => event.category))];
+    const pastRevenues = categoryRevenues(pastCategories, pastEvents);
+    const pastAttendances = categoryAttendances(pastCategories, pastEvents);
+    printStatsByCategory(pastCategories, pastRevenues, pastAttendances, pastTable)
 });
 
 function printStats(events) {
@@ -43,10 +54,6 @@ function printStats(events) {
 
     table.appendChild(fila);
 };
-
-
-
-
 
 const eventWithLargestCapacity = eventList => eventList.reduce((previousEvent, currentEvent) => previousEvent.capacity > currentEvent.capacity ? previousEvent : currentEvent);
 
@@ -77,12 +84,12 @@ function printStatsByCategory(categories, revenues, attendances, table) {
         const attendance = attendances[i];
 
         const row = `
-                <tr>
-                  <td>${category}</td>
-                  <td>${revenue}</td>
-                  <td>${attendance}%</td>
-                </tr>
-                `;
+            <tr>
+              <td>${category}</td>
+              <td>${revenue}</td>
+              <td>${attendance}%</td>
+            </tr>
+            `;
         table.insertAdjacentHTML('beforeend', row);
     }
 
@@ -97,7 +104,7 @@ const categoryAttendance = (category, events) => {
     let totalCapacity = 0;
     for (const event of events) {
         if (event.category === category) {
-            totalEstimate += event.estimate;
+            totalEstimate += event.estimate ? event.estimate : event.assistance;
             totalCapacity += event.capacity;
         }
     }
@@ -113,7 +120,7 @@ const categoryRevenue = (category, events) => {
     let totalRevenue = 0;
     for (const event of events) {
         if (event.category === category) {
-            totalRevenue += event.price * event.estimate;
+            totalRevenue += event.price * (event.estimate ? event.estimate : event.assistance);
         }
     }
     return totalRevenue;
