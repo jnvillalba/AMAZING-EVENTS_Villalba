@@ -1,8 +1,7 @@
 //📌 Primera parte:
-const highestAttendanceEvent = document.querySelector('#highestAttendance');
-const lowestAttendanceEvent = document.querySelector('#lowestAttendance');
-const largestCapacityEvent = document.querySelector('#largestCapacity');
+const table = document.querySelector('#stats-table');
 
+const upctable = document.querySelector('#upc-table');
 let eventsJSON;
 const getEvents = async () => {
     try {
@@ -19,12 +18,7 @@ getEvents().then(() => {
     const events = eventsJSON.events;
 
     //📌 Primera parte:
-    const highest = eventWithHighestAttendance(events)
-    const lowest = eventWithLowestAttendance(events)
-    const largest = eventWithLargestCapacity(events)
-    highestAttendanceEvent.textContent = highest.name;
-    lowestAttendanceEvent.textContent = lowest.name;
-    largestCapacityEvent.textContent = largest.name;
+    printStats(events)
 
     // 📌 Segunda parte:
     const upcomingEvents = events.filter(
@@ -32,9 +26,27 @@ getEvents().then(() => {
     );
     const categories = [...new Set(upcomingEvents.map((event) => event.category))];
     const revenues = categoryRevenues(categories, upcomingEvents);
-    const attendance = categoryAttendances(categories, upcomingEvents);
-    printUpcomingStats(categories, revenues, attendance)
+    const attendances = categoryAttendances(categories, upcomingEvents);
+    printStatsByCategory(categories, revenues, attendances, upctable)
 });
+
+function printStats(events) {
+    const highest = eventWithHighestAttendance(events)
+    const lowest = eventWithLowestAttendance(events)
+    const largest = eventWithLargestCapacity(events)
+    const fila = document.createElement('tr');
+    fila.innerHTML = `
+      <td>${highest.name}</td>
+      <td>${lowest.name}</td>
+      <td>${largest.name}</td>
+      `;
+
+    table.appendChild(fila);
+};
+
+
+
+
 
 const eventWithLargestCapacity = eventList => eventList.reduce((previousEvent, currentEvent) => previousEvent.capacity > currentEvent.capacity ? previousEvent : currentEvent);
 
@@ -57,27 +69,23 @@ function eventWithLowestAttendance(eventList) {
 
 
 //📌 Segunda parte:
-function printUpcomingStats(categories, revenues, attendance) {
-    const tbody = document.querySelector('table.container tbody');
-    //cambiar a tablas diferentes
-    const upcomingHeader = document.querySelector('table.container tr:nth-of-type(4)');
+function printStatsByCategory(categories, revenues, attendances, table) {
 
     for (let i = 0; i < categories.length; i++) {
-        const tr = document.createElement('tr');
-        const tdCategory = document.createElement('td');
-        const tdRevenues = document.createElement('td');
-        const tdAttendance = document.createElement('td');
+        const category = categories[i];
+        const revenue = revenues[i];
+        const attendance = attendances[i];
 
-        tdCategory.textContent = categories[i];
-        tdRevenues.textContent = revenues[i];
-        tdAttendance.textContent = attendance[i] + " %";
-
-        tr.appendChild(tdCategory);
-        tr.appendChild(tdRevenues);
-        tr.appendChild(tdAttendance);
-
-        tbody.insertBefore(tr, upcomingHeader.nextElementSibling);
+        const row = `
+                <tr>
+                  <td>${category}</td>
+                  <td>${revenue}</td>
+                  <td>${attendance}%</td>
+                </tr>
+                `;
+        table.insertAdjacentHTML('beforeend', row);
     }
+
 }
 
 const categoryAttendances = (categories, events) => {
