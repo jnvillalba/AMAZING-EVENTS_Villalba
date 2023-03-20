@@ -26,15 +26,14 @@ getEvents().then(() => {
     const upcomingEvents = events.filter(
         (event) => eventsJSON.currentDate <= event.date
     );
-    printEventsStatsByCategory(upcomingEvents,upcTable);
+    printEventsStatsByCategory(upcomingEvents, upcTable);
 
     //📌 Tercera parte:
     const pastEvents = events.filter(
         (event) => eventsJSON.currentDate >= event.date
     );
-    printEventsStatsByCategory(pastEvents,pastTable);
+    printEventsStatsByCategory(pastEvents, pastTable);
 });
-
 
 
 //📌 Primera parte:
@@ -56,49 +55,43 @@ const eventWithLargestCapacity = eventList => eventList.reduce((previousEvent, c
 
 function eventWithHighestAttendance(eventList) {
     const highestAttendanceEvent = eventList.reduce((previousEvent, currentEvent) => {
-        const previousAttendancePercentage = previousEvent.assistance / previousEvent.capacity;
-        const currentAttendancePercentage = currentEvent.assistance / currentEvent.capacity;
+        const previousAttendancePercentage = (previousEvent.estimate ? previousEvent.estimate : previousEvent.assistance / previousEvent.capacity) * 100;
+        const currentAttendancePercentage = (currentEvent.estimate ? currentEvent.estimate : currentEvent.assistance / currentEvent.capacity) * 100;
         return currentAttendancePercentage > previousAttendancePercentage ? currentEvent : previousEvent;
     });
     return highestAttendanceEvent;
 }
 function eventWithLowestAttendance(eventList) {
     const lowestAttendanceEvent = eventList.reduce((previousEvent, currentEvent) => {
-        const previousAttendancePercentage = previousEvent.assistance / previousEvent.capacity;
-        const currentAttendancePercentage = currentEvent.assistance / currentEvent.capacity;
+        const previousAttendancePercentage = previousEvent.estimate ? previousEvent.estimate : previousEvent.assistance / previousEvent.capacity * 100;
+        const currentAttendancePercentage = currentEvent.estimate ? currentEvent.estimate : currentEvent.assistance / currentEvent.capacity * 100;
         return currentAttendancePercentage < previousAttendancePercentage ? currentEvent : previousEvent;
     });
     return lowestAttendanceEvent;
 }
 
-
 //📌 Segunda parte y Tercera parte:
 
-function printEventsStatsByCategory(events,table){
+function printEventsStatsByCategory(events, table) {
     const categories = [...new Set(events.map((event) => event.category))];
     const revenues = categoryRevenues(categories, events);
     const attendances = categoryAttendances(categories, events);
     printStatsByCategory(categories, revenues, attendances, table)
 }
 
-
 function printStatsByCategory(categories, revenues, attendances, table) {
-
     for (let i = 0; i < categories.length; i++) {
         const category = categories[i];
         const revenue = revenues[i];
         const attendance = attendances[i];
-
-        const row = `
-            <tr>
+        const row = document.createElement('tr');
+        row.innerHTML = `
               <td>${category}</td>
               <td>${revenue}</td>
               <td>${attendance}%</td>
-            </tr>
             `;
-        table.insertAdjacentHTML('beforeend', row);
+        table.appendChild(row);
     }
-
 }
 
 const categoryAttendances = (categories, events) => {
