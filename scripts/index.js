@@ -2,7 +2,7 @@
 let eventsJSON;
 const getEvents = async () => {
   try {
-    const response = await fetch('../amazing.json')
+    const response = await fetch(' ../data/amazing.json')
     eventsJSON = await response.json()
     console.log(eventsJSON);
     printCards(eventsJSON.events);

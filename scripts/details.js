@@ -1,7 +1,7 @@
 let eventsJSON;
 const getEvents = async () => {
   try {
-    const response = await fetch('../amazing.json')
+    const response = await fetch(' ../data/amazing.json')
     eventsJSON = await response.json()
     const event = eventsJSON.events.find((event) => event._id == id);
     printDetails(event);
