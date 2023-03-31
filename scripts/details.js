@@ -1,36 +1,28 @@
-let eventsJSON;
-const getEvents = async () => {
-  try {
-    const response = await fetch(' ../data/amazing.json')
-    eventsJSON = await response.json()
-    const event = eventsJSON.events.find((event) => event._id == id);
-    printDetails(event);
-  }
-  catch (error) {
-    console.log(error);
-    alert('Error')
-  }
-}
+const { createApp } = Vue;
 
-getEvents()
+const app = createApp({
+  data() {
+    return {
+      event: {},
+    };
+  },
+  created() {
+    this.getEvent();
+  },
+  methods: {
+    async getEvent() {
+      try {
+        const response = await fetch("../data/amazing.json");
+        const eventsJSON = await response.json();
+        const id = new URLSearchParams(document.location.search).get("id");
+        const event = eventsJSON.events.find((event) => event._id == id);
+        this.event = event;
+      } catch (error) {
+        console.log(error);
+        alert("Error");
+      }
+    },
+  },
+});
 
-const querySearch = document.location.search;
-
-const id = new URLSearchParams(querySearch).get("id");
-
-const containerCards = document.getElementById("details");
-
-function printDetails(event) {
-  containerCards.innerHTML = ` 
-    <article class="cta my-5 mx-3 ">
-          <img src="${event.image}" alt="${event.name}" />
-          <div class="cta__text-column">
-            <h2>${event.name}</h2>
-            <p>${event.description}</p>
-            <p>Date: ${event.date}</p>
-            <p>Place: ${event.place}</p>
-            <p>Price: ${event.price}</p>
-          </div>
-        </article>
-`;
-}
+app.mount("#app");

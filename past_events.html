@@ -131,7 +131,7 @@
                 <button
                   type="button"
                   class="btn btn-primary button"
-                  @click="location.href='./details.html?id=${event._id}'"
+                  v-bind:onclick="`location.href=\'./details.html?id=${event._id}\'`"
                 >
                   Details
                 </button>

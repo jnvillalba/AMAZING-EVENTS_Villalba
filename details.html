@@ -15,83 +15,95 @@
     <title>Details</title>
   </head>
   <body>
-    <header>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="./index.html">
-          <img src="/assets/Logo_Amazing_Events.png" alt="Logo" height="36" />
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-          data-bs-toggle="collapse"
-          data-bs-target=".navbar-collapse"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+    <div id="app">
+      <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+          <a class="navbar-brand" href="./index.html">
+            <img src="/assets/Logo_Amazing_Events.png" alt="Logo" height="36" />
+          </a>
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+            data-bs-toggle="collapse"
+            data-bs-target=".navbar-collapse"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="./index.html">Home </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./upcoming_events.html"
-                >Upcoming Events</a
-              >
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./past_events.html">Past Events</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./contact.html">Contact</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="./stats.html">Stats</a>
-            </li>
-          </ul>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="./index.html">Home </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./upcoming_events.html"
+                  >Upcoming Events</a
+                >
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./past_events.html">Past Events</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./contact.html">Contact</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./stats.html">Stats</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+      <main>
+        <section class="vh-100 d-flex justify-content-center" id="details">
+          <div>
+            <article class="cta my-5 mx-3">
+              <img :src="event.image" :alt="event.name" />
+              <div class="cta__text-column">
+                <h2>{{ event.name }}</h2>
+                <p>{{ event.description }}</p>
+                <p>Date: {{ event.date }}</p>
+                <p>Place: {{ event.place }}</p>
+                <p>Price: {{ event.price }}</p>
+              </div>
+            </article>
+          </div>
+        </section>
+      </main>
+      <footer
+        class="d-flex flex-wrap justify-content-between align-items-center px-3 pt-3 mt-4 border-top"
+      >
+        <div class="col-md-4 py-3 d-flex align-items-center">
+          <a href="/" class="mb-3 me-2 mb-md-0 text-decoration-none lh-1">
+            <span class="mb-3 mb-md-0">Cohort</span></a
+          >
         </div>
-      </nav>
-    </header>
-    <main>
-      <section
-        class="vh-100 d-flex justify-content-center"
-        id="details"
-      ></section>
-    </main>
-    <footer
-      class="d-flex flex-wrap justify-content-between align-items-center px-3 pt-3 mt-4 border-top"
-    >
-      <div class="col-md-4 py-3 d-flex align-items-center">
-        <a href="/" class="mb-3 me-2 mb-md-0 text-decoration-none lh-1">
-          <span class="mb-3 mb-md-0">Cohort</span></a
-        >
-      </div>
 
-      <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
-        <li class="ms-3">
-          <a class="m-1 rounded-circle" href="http://www.instagram.com/">
-            <i class="fa-brands fa-instagram"></i
-          ></a>
-        </li>
-        <li class="ms-3">
-          <a class="m-1 rounded-circle" href="http://www.facebook.com/">
-            <i class="fa-brands fa-facebook"></i
-          ></a>
-        </li>
-        <li class="ms-3">
-          <a class="m-1 rounded-circle" href="http://www.whatsapp.com/">
-            <i class="fa-brands fa-whatsapp"></i
-          ></a>
-        </li>
-      </ul>
-    </footer>
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+          <li class="ms-3">
+            <a class="m-1 rounded-circle" href="http://www.instagram.com/">
+              <i class="fa-brands fa-instagram"></i
+            ></a>
+          </li>
+          <li class="ms-3">
+            <a class="m-1 rounded-circle" href="http://www.facebook.com/">
+              <i class="fa-brands fa-facebook"></i
+            ></a>
+          </li>
+          <li class="ms-3">
+            <a class="m-1 rounded-circle" href="http://www.whatsapp.com/">
+              <i class="fa-brands fa-whatsapp"></i
+            ></a>
+          </li>
+        </ul>
+      </footer>
+    </div>
     <!--Javascript bootstrap-->
-
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
