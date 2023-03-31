@@ -8,6 +8,7 @@ const app = createApp({
             categories: [],
             eventsToShow: [],
             checkedCategories: [],
+            searchValue: "",
         }
     },
 
@@ -40,10 +41,14 @@ const app = createApp({
     computed: {
         filterEvents() {
             if (this.checkedCategories.length === 0) {
-                this.eventsToShow = this.events;
-            } else {
                 this.eventsToShow = this.events.filter((event) =>
-                    this.checkedCategories.includes(event.category)
+                    event.name.toLowerCase().includes(this.searchValue)
+                );
+            } else {
+                this.eventsToShow = this.events.filter(
+                    (event) =>
+                        this.checkedCategories.includes(event.category) &&
+                        event.name.toLowerCase().includes(this.searchValue)
                 );
             }
         },

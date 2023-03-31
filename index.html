@@ -92,6 +92,8 @@
                     id="form1"
                     class="form-control"
                     placeholder="search"
+                    v-model="searchValue"
+                    @input="filterEvents"
                   />
                   <label class="form-label" for="form1"></label>
                   <button type="button" class="btn btn-primary">
@@ -106,6 +108,9 @@
         <div
           class="container mt-4 d-flex flex-wrap align-items-center justify-content-center"
         >
+          <p v-if="!eventsToShow.length" class="display-1 fw-bolder text-white">
+            No hay coincidencias
+          </p>
           <div
             v-for="event of eventsToShow"
             class="card d-flex flex-column align-items-center mx-2 my-2"
