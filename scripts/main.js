@@ -14,8 +14,6 @@ const app = createApp({
 
     created() {
         this.getEvents()
-        //this.printCheckboxs(this.categories, this.events);
-        //this.printSearch(this.events);
     },
     mounted() {
 
