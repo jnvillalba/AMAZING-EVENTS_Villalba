@@ -6,7 +6,8 @@ const app = createApp({
             apiUrl: "https://mindhub-xj03.onrender.com/api/amazing",
             events: [],
             categories: [],
-            eventsToshow: [],
+            eventsToShow: [],
+            checkedCategories: [],
         }
     },
 
@@ -24,7 +25,7 @@ const app = createApp({
                 .then(response => response.json())
                 .then(dataEvents => {
                     this.events = dataEvents.events
-                    this.eventsToshow = this.events
+                    this.eventsToShow = this.events
                     this.getCategories()
                 })
                 .catch(error => console.log(error))
@@ -34,10 +35,17 @@ const app = createApp({
             this.categories = [...new Set(this.events.map((event) => event.category))];
         },
 
+
     },
     computed: {
-        superFiltro() {
-
-        }
+        filterEvents() {
+            if (this.checkedCategories.length === 0) {
+                this.eventsToShow = this.events;
+            } else {
+                this.eventsToShow = this.events.filter((event) =>
+                    this.checkedCategories.includes(event.category)
+                );
+            }
+        },
     }
 }).mount('#app')

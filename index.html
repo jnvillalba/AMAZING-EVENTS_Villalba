@@ -72,7 +72,19 @@
 
           <form class="container-fluid">
             <div class="row">
-              <div class="col-md-9" id="checkboxs"></div>
+              <div class="col-md-9" id="checkboxs">
+                <label v-for="category in categories" :key="category">
+                  {{ category }}
+                  <input
+                    type="checkbox"
+                    :name="category"
+                    :value="category"
+                    v-model="checkedCategories"
+                    @change="filterEvents"
+                  />
+                </label>
+              </div>
+
               <div class="col-md-3">
                 <div class="input-group">
                   <input
@@ -90,19 +102,16 @@
             </div>
           </form>
         </div>
+
         <div
           class="container mt-4 d-flex flex-wrap align-items-center justify-content-center"
         >
           <div
-            v-for="event of events"
+            v-for="event of eventsToShow"
             class="card d-flex flex-column align-items-center mx-2 my-2"
             style="width: 18rem; height: 25rem"
           >
-            <img
-              class="card-img-top"
-              :src="event.image"
-              alt="Card image cap"
-            />
+            <img class="card-img-top" :src="event.image" alt="Card image cap" />
             <div class="card-body">
               <h5 class="card-title">{{event.name}}</h5>
               <p class="card-text">{{event.description}}</p>
