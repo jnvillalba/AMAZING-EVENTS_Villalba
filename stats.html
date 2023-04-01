@@ -94,10 +94,10 @@
             </tbody>
           </table>
 
-          <table class="table" id="upc-table">
+          <table class="table">
             <thead>
               <tr>
-                <th colspan="3">Upcoming events statics by category</th>
+                <th colspan="3">Upcoming Events Statistic by Category</th>
               </tr>
               <tr>
                 <th class="subtitle">Categories</th>
@@ -105,12 +105,22 @@
                 <th class="subtitle">Percentage of attendance</th>
               </tr>
             </thead>
+            <tbody>
+              <tr
+                v-for="(categoryStats, index) in upcomingEventsStats"
+                :key="index"
+              >
+                <td>{{ categoryStats.category }}</td>
+                <td>{{ categoryStats.revenue }}</td>
+                <td>{{ categoryStats.attendance }}%</td>
+              </tr>
+            </tbody>
           </table>
 
-          <table class="table" id="past-table">
+          <table class="table">
             <thead>
               <tr>
-                <th colspan="3">Past Events statistic by category</th>
+                <th colspan="3">Past Events Statistic by Category</th>
               </tr>
               <tr>
                 <th class="subtitle">Categories</th>
@@ -118,6 +128,16 @@
                 <th class="subtitle">Percentage of attendance</th>
               </tr>
             </thead>
+            <tbody>
+              <tr
+                v-for="(categoryStats, index) in pastEventsStats"
+                :key="index"
+              >
+                <td>{{ categoryStats.category }}</td>
+                <td>{{ categoryStats.revenue }}</td>
+                <td>{{ categoryStats.attendance }}%</td>
+              </tr>
+            </tbody>
           </table>
         </div>
       </main>
@@ -149,7 +169,6 @@
           </li>
         </ul>
       </footer>
-
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script
@@ -161,6 +180,6 @@
       src="https://kit.fontawesome.com/fafbafa778.js"
       crossorigin="anonymous"
     ></script>
-    <script src="./scripts/stasVUE.js"></script>
+    <script src="./scripts/stats.js"></script>
   </body>
 </html>

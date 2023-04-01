@@ -1,126 +1,162 @@
-const table = document.querySelector('#stats-table');
+const { createApp } = Vue;
 
-const upcTable = document.querySelector('#upc-table');
+const app = createApp({
+  data() {
+    return {
+      highest: {},
+      lowest: {},
+      largest: {},
+      eventsJSON: null,
+      upcomingEventsStats: null,
+      pastEventsStats: null,
+    };
+  },
+  mounted() {
+    this.getEvents();
+  },
+  methods: {
+    async getEvents() {
+      try {
+        const response = await fetch("../data/amazing.json");
+        this.eventsJSON = await response.json();
+        console.log(this.eventsJSON);
+        //📌 Primera parte:
+        this.printStats(this.eventsJSON.events);
 
-const pastTable = document.querySelector('#past-table');
+        // 📌 Segunda y Tercera parte:
+        this.computeStats();
 
-let eventsJSON;
-const getEvents = async () => {
-    try {
-        const response = await fetch('../data/amazing.json')
-        eventsJSON = await response.json()
-    }
-    catch (error) {
+      } catch (error) {
         console.log(error);
-        alert('Error')
-    }
-}
-
-getEvents().then(() => {
-    const events = eventsJSON.events;
+        alert("Error");
+      }
+    },
 
     //📌 Primera parte:
-    printStats(events)
 
-    // 📌 Segunda parte:
-    const upcomingEvents = events.filter(
-        (event) => eventsJSON.currentDate <= event.date
-    );
-    printEventsStatsByCategory(upcomingEvents, upcTable);
+    printStats(events) {
+      this.highest = this.eventWithHighestAttendance(events);
+      this.lowest = this.eventWithLowestAttendance(events);
+      this.largest = this.eventWithLargestCapacity(events);
+    },
 
-    //📌 Tercera parte:
-    const pastEvents = events.filter(
-        (event) => eventsJSON.currentDate >= event.date
-    );
-    printEventsStatsByCategory(pastEvents, pastTable);
-});
+    eventWithLargestCapacity(eventList) {
+      return eventList.reduce((previousEvent, currentEvent) =>
+        previousEvent.capacity > currentEvent.capacity
+          ? previousEvent
+          : currentEvent
+      );
+    },
+    eventWithHighestAttendance(eventList) {
+      const highestAttendanceEvent = eventList.reduce(
+        (previousEvent, currentEvent) => {
+          const previousAttendancePercentage =
+            (previousEvent.estimate
+              ? previousEvent.estimate
+              : previousEvent.assistance / previousEvent.capacity) * 100;
+          const currentAttendancePercentage =
+            (currentEvent.estimate
+              ? currentEvent.estimate
+              : currentEvent.assistance / currentEvent.capacity) * 100;
+          return currentAttendancePercentage > previousAttendancePercentage
+            ? currentEvent
+            : previousEvent;
+        }
+      );
+      return highestAttendanceEvent;
+    },
 
+    eventWithLowestAttendance(eventList) {
+      const lowestAttendanceEvent = eventList.reduce(
+        (previousEvent, currentEvent) => {
+          const previousAttendancePercentage = previousEvent.estimate
+            ? previousEvent.estimate
+            : (previousEvent.assistance / previousEvent.capacity) * 100;
+          const currentAttendancePercentage = currentEvent.estimate
+            ? currentEvent.estimate
+            : (currentEvent.assistance / currentEvent.capacity) * 100;
+          return currentAttendancePercentage < previousAttendancePercentage
+            ? currentEvent
+            : previousEvent;
+        }
+      );
+      return lowestAttendanceEvent;
+    },
 
-//📌 Primera parte:
-function printStats(events) {
-    const highest = eventWithHighestAttendance(events)
-    const lowest = eventWithLowestAttendance(events)
-    const largest = eventWithLargestCapacity(events)
-    const row = document.createElement('tr');
-    row.innerHTML = `
-      <td>${highest.name}</td>
-      <td>${lowest.name}</td>
-      <td>${largest.name}</td>
-      `;
+    printEventsStatsByCategory(events, table) {
+      this.categories = [...new Set(events.map((event) => event.category))];
+      this.revenues = this.categoryRevenues(this.categories, events);
+      this.attendances = this.categoryAttendances(this.categories, events);
+      this.printStatsByCategory(
+        this.categories,
+        this.revenues,
+        this.attendances,
+        table
+      );
+    },
 
-    table.appendChild(row);
-};
+    // 📌 Segunda y Tercera parte:
+    computeStats() {
+      const events = this.eventsJSON.events;
 
-const eventWithLargestCapacity = eventList => eventList.reduce((previousEvent, currentEvent) => previousEvent.capacity > currentEvent.capacity ? previousEvent : currentEvent);
-
-function eventWithHighestAttendance(eventList) {
-    const highestAttendanceEvent = eventList.reduce((previousEvent, currentEvent) => {
-        const previousAttendancePercentage = (previousEvent.estimate ? previousEvent.estimate : previousEvent.assistance / previousEvent.capacity) * 100;
-        const currentAttendancePercentage = (currentEvent.estimate ? currentEvent.estimate : currentEvent.assistance / currentEvent.capacity) * 100;
-        return currentAttendancePercentage > previousAttendancePercentage ? currentEvent : previousEvent;
-    });
-    return highestAttendanceEvent;
-}
-function eventWithLowestAttendance(eventList) {
-    const lowestAttendanceEvent = eventList.reduce((previousEvent, currentEvent) => {
-        const previousAttendancePercentage = previousEvent.estimate ? previousEvent.estimate : previousEvent.assistance / previousEvent.capacity * 100;
-        const currentAttendancePercentage = currentEvent.estimate ? currentEvent.estimate : currentEvent.assistance / currentEvent.capacity * 100;
-        return currentAttendancePercentage < previousAttendancePercentage ? currentEvent : previousEvent;
-    });
-    return lowestAttendanceEvent;
-}
-
-//📌 Segunda parte y Tercera parte:
-
-function printEventsStatsByCategory(events, table) {
-    const categories = [...new Set(events.map((event) => event.category))];
-    const revenues = categoryRevenues(categories, events);
-    const attendances = categoryAttendances(categories, events);
-    printStatsByCategory(categories, revenues, attendances, table)
-}
-
-function printStatsByCategory(categories, revenues, attendances, table) {
-    for (let i = 0; i < categories.length; i++) {
+      this.upcomingEventsStats = this.printEventsStatsByCategory(
+        events.filter((event) => this.eventsJSON.currentDate <= event.date)
+      );
+      this.pastEventsStats = this.printEventsStatsByCategory(
+        events.filter((event) => this.eventsJSON.currentDate >= event.date)
+      );
+    },
+    printEventsStatsByCategory(events) {
+      const categories = [...new Set(events.map((event) => event.category))];
+      const revenues = this.categoryRevenues(categories, events);
+      const attendances = this.categoryAttendances(categories, events);
+      return this.printStatsByCategory(categories, revenues, attendances);
+    },
+    printStatsByCategory(categories, revenues, attendances) {
+      const categoryStats = [];
+      for (let i = 0; i < categories.length; i++) {
         const category = categories[i];
         const revenue = revenues[i];
         const attendance = attendances[i];
-        const row = document.createElement('tr');
-        row.innerHTML = `
-              <td>${category}</td>
-              <td>${revenue}</td>
-              <td>${attendance}%</td>
-            `;
-        table.appendChild(row);
-    }
-}
-
-const categoryAttendances = (categories, events) => {
-    return categories.map((category) => categoryAttendance(category, events));
-}
-
-const categoryAttendance = (category, events) => {
-    let totalEstimate = 0;
-    let totalCapacity = 0;
-    for (const event of events) {
+        categoryStats.push({
+          category,
+          revenue,
+          attendance,
+        });
+      }
+      return categoryStats;
+    },
+    categoryAttendances(categories, events) {
+      return categories.map((category) =>
+        this.categoryAttendance(category, events)
+      );
+    },
+    categoryAttendance(category, events) {
+      let totalEstimate = 0;
+      let totalCapacity = 0;
+      for (const event of events) {
         if (event.category === category) {
-            totalEstimate += event.estimate ? event.estimate : event.assistance;
-            totalCapacity += event.capacity;
+          totalEstimate += event.estimate ? event.estimate : event.assistance;
+          totalCapacity += event.capacity;
         }
-    }
-    const percentage = (totalEstimate / totalCapacity) * 100;
-    return percentage.toFixed(2);
-};
-
-const categoryRevenues = (categories, events) => {
-    return categories.map((category) => categoryRevenue(category, events));
-}
-
-const categoryRevenue = (category, events) => {
-    let totalRevenue = 0;
-    for (const event of events) {
+      }
+      const percentage = (totalEstimate / totalCapacity) * 100;
+      return percentage.toFixed(2);
+    },
+    categoryRevenues(categories, events) {
+      return categories.map((category) =>
+        this.categoryRevenue(category, events)
+      );
+    },
+    categoryRevenue(category, events) {
+      let totalRevenue = 0;
+      for (const event of events) {
         if (event.category === category) {
-            totalRevenue += event.price * (event.estimate ? event.estimate : event.assistance);
+          totalRevenue +=
+            event.price * (event.estimate ? event.estimate : event.assistance);
         }
-    }
-    return totalRevenue;
-};
+      }
+      return totalRevenue;
+    },
+  },
+}).mount("#app");
