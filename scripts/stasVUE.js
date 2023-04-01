@@ -18,14 +18,23 @@ const app = createApp({
                 const response = await fetch("../data/amazing.json");
                 const eventsJSON = await response.json();
                 console.log(eventsJSON);
-                this.highest = this.eventWithHighestAttendance(eventsJSON.events)
-                
-                this.lowest = this.eventWithLowestAttendance(eventsJSON.events)
-                this.largest = this.eventWithLargestCapacity(eventsJSON.events)
+                //📌 Primera parte:
+                this.printStats(eventsJSON.events)
+
+                // 📌 Segunda parte:
+
             } catch (error) {
                 console.log(error);
                 alert("Error");
             }
+        },
+
+        //📌 Primera parte:
+
+        printStats(events) {
+            this.highest = this.eventWithHighestAttendance(events)
+            this.lowest = this.eventWithLowestAttendance(events)
+            this.largest = this.eventWithLargestCapacity(events)
         },
 
         eventWithLargestCapacity(eventList) {
@@ -47,10 +56,10 @@ const app = createApp({
                 return currentAttendancePercentage < previousAttendancePercentage ? currentEvent : previousEvent;
             });
             return lowestAttendanceEvent;
-        }
+        },
+        
+    }
 
-
-    },
 }).mount("#app");
 
 
